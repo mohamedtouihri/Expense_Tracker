@@ -1,0 +1,672 @@
+/*
+  ============================================================
+  STAGE 2 — CSS LAYOUT & VISUAL DESIGN
+  ============================================================
+  Goal: Make the HTML from Stage 1 look like a real app.
+
+  What you will learn:
+  - CSS custom properties (variables)
+  - The Box Model (margin, padding, border)
+  - Flexbox — for rows and alignment
+  - CSS Grid — for the two-column layout
+  - Media queries — for mobile screens
+  - Transitions — smooth hover effects
+  - Selectors — how to target exactly the right element
+
+  HOW TO USE THIS FILE:
+  Read every comment block before the code it describes.
+  Try changing values and watching what happens in the browser.
+  All "TRY THIS" notes are small experiments for you to do.
+  ============================================================
+*/
+
+
+/* ============================================================
+  1. CSS CUSTOM PROPERTIES (Variables)
+  ============================================================
+  BEFORE (without variables):
+    color: #2563eb;           <- you type this color 20 times
+    border-color: #2563eb;    <- if you want to change it, you change 20 lines
+
+  AFTER (with variables):
+    color: var(--primary);    <- you type the variable name
+    border-color: var(--primary);
+    To change the color everywhere: edit ONE line inside :root {}
+
+  :root means "the very top of the HTML document".
+  Variables defined here are available EVERYWHERE in your CSS.
+  Variable names must start with --
+============================================================ */
+
+:root {
+  /* Brand colors */
+  --primary:        #6366f1;   /* indigo — buttons, accents */
+  --primary-dark:   #4f46e5;   /* darker indigo — hover state */
+  --primary-light:  #e0e7ff;   /* very light indigo — backgrounds */
+
+  /* Semantic colors — named by MEANING, not appearance */
+  --income-color:   #10b981;   /* green  — income amounts */
+  --expense-color:  #ef4444;   /* red    — expense amounts */
+  --warning-color:  #f59e0b;   /* amber  — warnings */
+
+  /* Neutral grays — used for text, borders, backgrounds */
+  --gray-50:  #f9fafb;   /* almost white */
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;   /* light borders */
+  --gray-400: #9ca3af;   /* placeholder text */
+  --gray-600: #4b5563;   /* secondary text */
+  --gray-800: #1f2937;   /* primary text */
+  --gray-900: #111827;   /* headings */
+
+  /* Spacing — consistent sizes used throughout */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+
+  /* Border radius — how round corners are */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+
+  /* Typography */
+  --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Courier New', monospace; /* for amounts */
+}
+
+/*
+  TRY THIS: Change --primary to #e11d48 (red) and save.
+  Every button and accent will turn red instantly.
+  Then change it back to #6366f1.
+*/
+
+
+/* ============================================================
+  2. CSS RESET & BASE STYLES
+  ============================================================
+  Browsers have their own default styles that differ between them.
+  A "reset" removes those defaults so we start with a clean slate.
+============================================================ */
+
+/* The * selector means "select every single element" */
+*, *::before, *::after {
+  /*
+    box-sizing: border-box — VERY IMPORTANT.
+
+    BEFORE (default, content-box):
+      width: 200px + padding: 20px = actual width: 240px  ← confusing!
+
+    AFTER (border-box):
+      width: 200px + padding: 20px = actual width: 200px  ← predictable!
+
+    With border-box, the width you set IS the total width.
+    Padding and border are counted INSIDE the width, not added on top.
+  */
+  box-sizing: border-box;
+  margin: 0;    /* remove default margins from all elements */
+  padding: 0;   /* remove default padding from all elements */
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: 16px;
+  color: var(--gray-800);
+  background-color: var(--gray-50);
+  line-height: 1.6; /* space between lines of text */
+  min-height: 100vh; /* fill at least the full screen height */
+}
+
+h1 { font-size: 1.6rem; font-weight: 700; color: var(--gray-900); }
+h2 { font-size: 1.1rem; font-weight: 600; color: var(--gray-800); margin-bottom: var(--space-md); }
+
+
+/* ============================================================
+  3. HEADER
+  ============================================================
+  MINI EXAMPLE — Flexbox direction:
+
+  display: flex; flex-direction: row;    → items side by side →
+  display: flex; flex-direction: column; → items stacked ↓
+
+  justify-content controls position on the MAIN axis
+  align-items    controls position on the CROSS axis
+
+  If flex-direction: row:
+    justify-content → left/right
+    align-items     → up/down
+
+  If flex-direction: column:
+    justify-content → up/down
+    align-items     → left/right
+============================================================ */
+
+header {
+  background: white;
+  padding: var(--space-lg) var(--space-xl);
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--gray-200);
+
+  /* Stack h1 and the summary bar vertically */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg); /* space between h1 and summary bar */
+}
+
+/* The summary bar: 3 cards in a row */
+#summary {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap; /* if screen is too narrow, wrap to next line */
+}
+
+.summary-card {
+  flex: 1;           /* each card takes equal space */
+  min-width: 120px;  /* never shrink below this */
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+
+  /* Stack label above amount */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.summary-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gray-400);
+  font-weight: 500;
+}
+
+.summary-amount {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--gray-900);
+}
+
+/* Color the income and expense amounts differently */
+.summary-amount.income  { color: var(--income-color); }
+.summary-amount.expense { color: var(--expense-color); }
+
+/*
+  TRY THIS: Change flex: 1 on .summary-card to flex: 0 0 200px
+  and watch what happens. The cards become fixed-width instead of stretchy.
+  Then change it back.
+*/
+
+
+/* ============================================================
+  4. MAIN LAYOUT — CSS GRID (two columns)
+  ============================================================
+  MINI EXAMPLE — CSS Grid vs Flexbox:
+
+  Use FLEXBOX when you have ONE row or ONE column of items.
+  → navigation bar, button group, a single card's internals
+
+  Use CSS GRID when you have ROWS AND COLUMNS together.
+  → page layout, card grids, dashboard panels
+
+  grid-template-columns: 380px 1fr
+  This creates 2 columns:
+    - Column 1: exactly 380px wide (the form)
+    - Column 2: 1fr = "all remaining space" (the list)
+
+  grid-template-areas gives names to zones, like a blueprint:
+  "form  list"
+  "chart chart"
+
+  Then you assign elements to zones with grid-area.
+============================================================ */
+
+main {
+  display: grid;
+
+  grid-template-columns: 380px 1fr;
+  grid-template-rows: auto auto;
+
+  grid-template-areas:
+    "form  list"
+    "chart chart";
+
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  max-width: 1100px;
+  margin: 0 auto; /* center the layout on wide screens */
+}
+
+/* Assign each <section> to a grid area by name */
+main section:nth-child(1) { grid-area: form;  }
+main section:nth-child(2) { grid-area: list;  }
+main section:nth-child(3) { grid-area: chart; }
+
+/*
+  TRY THIS: Change grid-template-columns to 1fr 1fr
+  Both columns become equal width. See the difference?
+*/
+
+
+/* ============================================================
+  5. THE FORM
+============================================================ */
+
+#expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Each label + input pair */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+/*
+  This selector targets:
+  input[type="text"]   — description input
+  input[type="number"] — amount input
+  input[type="date"]   — date input
+  select               — all dropdowns
+  We use a comma to apply the same styles to all of them.
+*/
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+select {
+  padding: 10px var(--space-md);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-family: var(--font-main);
+  color: var(--gray-800);
+  background: white;
+  width: 100%;
+
+  /*
+    transition makes border-color animate smoothly when it changes.
+    "border-color 0.2s ease" means:
+    - animate the border-color property
+    - take 0.2 seconds
+    - use an "ease" timing (fast start, slow end)
+  */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/*
+  :focus is a CSS pseudo-class — it targets the element the user is
+  currently typing in. The outline: none removes the browser's default
+  ugly blue outline so we can replace it with our own nicer one.
+*/
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="search"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Error state — JavaScript will add this class to invalid inputs */
+input.error {
+  border-color: var(--expense-color);
+}
+
+.error-msg {
+  font-size: 0.75rem;
+  color: var(--expense-color);
+  min-height: 16px; /* reserve space so layout doesn't jump */
+}
+
+/* Buttons */
+#submit-btn {
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#submit-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* :active = while the button is being pressed */
+#submit-btn:active {
+  transform: scale(0.98); /* slight press-down effect */
+}
+
+#cancel-btn {
+  padding: 10px;
+  background: transparent;
+  color: var(--gray-600);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#cancel-btn:hover {
+  background: var(--gray-100);
+}
+
+
+/* ============================================================
+  6. FILTERS BAR
+============================================================ */
+
+#filters {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* The search input should take up more space than the dropdowns */
+#search-input { flex: 2; min-width: 140px; }
+#filter-category,
+#filter-type    { flex: 1; min-width: 120px; }
+
+
+/* ============================================================
+  7. EXPENSE LIST & CARDS
+  ============================================================
+  BEFORE & AFTER EXAMPLE — removing list styling:
+
+  BEFORE (default browser style for <ul> <li>):
+  • Grocery shopping      $45.00
+  • Coffee                $3.50
+
+  AFTER (our custom style):
+  ┌────────────────────────────┐
+  │ 🟢 Food   Grocery shopping │  -$45.00  [Edit] [Delete]
+  └────────────────────────────┘
+============================================================ */
+
+#expense-list {
+  list-style: none; /* removes the bullet points from <li> */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 520px;
+  overflow-y: auto; /* scroll when list is long */
+  padding-right: var(--space-xs); /* space for scrollbar */
+}
+
+.expense-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+
+  /* Put left content and right content on opposite ends */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+
+  /* Animate new cards appearing (JavaScript adds .new-card class) */
+  animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px); /* start 8px above */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);    /* end at normal position */
+  }
+}
+
+.expense-card:hover {
+  border-color: var(--gray-400);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Left side of the card: badge + description + date */
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0; /* allows text to truncate with overflow: hidden */
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--gray-800);
+  /* Truncate long descriptions with "..." */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.card-date {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+}
+
+/* Right side: amount + action buttons */
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0; /* never let the right side compress */
+}
+
+.card-amount {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  min-width: 80px;
+  text-align: right;
+}
+
+.card-amount.income  { color: var(--income-color); }
+.card-amount.expense { color: var(--expense-color); }
+
+.card-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border: 1px solid;
+}
+
+.btn-edit {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-color: var(--primary-light);
+}
+
+.btn-edit:hover {
+  background: #c7d2fe;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fee2e2;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+}
+
+
+/* ============================================================
+  8. CATEGORY BADGES
+  ============================================================
+  Each category gets its own color.
+  We use data attributes: data-category="food" → .badge-food
+
+  The JavaScript sets the category as a class on each badge.
+============================================================ */
+
+.card-category-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px; /* fully round = pill shape */
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+/* Each category: background + text color */
+.badge-food          { background: #fef9c3; color: #854d0e; }
+.badge-transport     { background: #dbeafe; color: #1e40af; }
+.badge-housing       { background: #dcfce7; color: #166534; }
+.badge-entertainment { background: #f3e8ff; color: #6b21a8; }
+.badge-health        { background: #fee2e2; color: #991b1b; }
+.badge-shopping      { background: #fce7f3; color: #9d174d; }
+.badge-salary        { background: #d1fae5; color: #065f46; }
+.badge-other         { background: var(--gray-100); color: var(--gray-600); }
+
+
+/* ============================================================
+  9. EMPTY STATE
+============================================================ */
+
+#empty-state {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--gray-400);
+  font-size: 0.9rem;
+}
+
+
+/* ============================================================
+  10. CHART SECTION
+============================================================ */
+
+main section:nth-child(3) {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+#expense-chart {
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+}
+
+
+/* ============================================================
+  11. MEDIA QUERIES — MOBILE RESPONSIVE
+  ============================================================
+  BEFORE (on a 375px phone screen, without media queries):
+  → Two columns that are too narrow to read. Broken layout.
+
+  AFTER (with @media):
+  → Single column that fills the screen. Everything stacks.
+
+  @media (max-width: 640px) means:
+  "Apply these styles ONLY when the screen is 640px wide or narrower."
+  On wider screens, these styles are completely ignored.
+============================================================ */
+
+@media (max-width: 640px) {
+
+  /* Switch from 2-column grid to single column */
+  main {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "form"
+      "list"
+      "chart";
+    padding: var(--space-md);
+  }
+
+  /* Summary cards: 1 per row on very small screens */
+  #summary {
+    flex-direction: column;
+  }
+
+  /* Shorten description on small screens */
+  .card-description {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Hide dates on very small screens to save space */
+  .card-date { display: none; }
+
+  /* Stack amount and buttons vertically */
+  .card-right {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+/*
+  TRY THIS: Open DevTools (F12) → click the phone icon (Toggle Device Toolbar).
+  Change the width to 375px. See how the layout changes.
+  Then remove the @media block and see what breaks.
+*/
+
+
+/*
+  ============================================================
+  WHAT TO DO NEXT
+
+  EXERCISE A: Change the --primary color variable to a new color.
+  Notice how every button and accent changes at once.
+
+  EXERCISE B: Find .expense-card and change the border-radius
+  to 0. The cards become square. Then try 50px — very round.
+
+  EXERCISE C: Add a new category badge for "education":
+  .badge-education { background: #e0f2fe; color: #0c4a6e; }
+  Then add "education" as an <option> in the HTML select elements.
+
+  EXERCISE D: Open DevTools, select an element, and look at the
+  "Computed" tab. This shows you exactly which CSS rules are active
+  and where they come from. This is the #1 tool for debugging CSS.
+
+  When you are comfortable, create app.js and move to Stage 3.
+  ============================================================
+*/
