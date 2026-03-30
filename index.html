@@ -1,41 +1,10 @@
 <!DOCTYPE html>
-<!--
-  ============================================================
-  STAGE 1 — HTML STRUCTURE
-  ============================================================
-  Goal: Build the skeleton of the Expense Tracker.
-  No styling. No JavaScript. Just structure.
-
-  What you will learn:
-  - Semantic HTML tags (header, main, section, form, ul)
-  - Form inputs: text, number, select, date
-  - How to link CSS and JS files
-  - Why structure comes before style
-
-  HOW TO USE THIS FILE:
-  Open it in your browser. It will look plain — that is correct.
-  Read every comment before you look at the code below it.
-  Then try removing a tag and see what breaks.
-  ============================================================
--->
 <html lang="en">
 
 <head>
-  <!-- charset tells the browser to use UTF-8 characters (handles é, £, € etc.) -->
   <meta charset="UTF-8">
-
-  <!-- viewport makes the page work correctly on mobile screens -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- This is the text shown in the browser tab -->
   <title>Expense Tracker</title>
-
-  <!--
-    LINKING YOUR CSS FILE
-    rel="stylesheet" tells the browser this is a CSS file.
-    href is the path to the file — "style.css" means same folder.
-    In Stage 2 you will create this file.
-  -->
   <link rel="stylesheet" href="style.css">
 
   <!-- PWA -->
@@ -47,272 +16,200 @@
   <link rel="apple-touch-icon" href="MobileIcon.png" />
 </head>
 
-<!--
-  <body> is everything the user sees.
-  We use semantic tags — tags that describe WHAT the content is,
-  not just how it looks. This helps browsers, search engines,
-  and screen readers understand your page.
--->
 <body>
 
-  <!-- ============================================================
-    HEADER
-    <header> = the top section of the page.
-    Contains the app title and the summary totals bar.
-  ============================================================ -->
-  <header>
-    <h1>Expense Tracker</h1>
+  <!-- =====================================================
+    APP SHELL — wraps sidebar + main content
+  ===================================================== -->
+  <div class="app-shell">
 
-    <!--
-      Summary bar: shows three totals side by side.
-      We use a <div> here because this is a layout container,
-      not a meaningful content section.
-      The id="summary" will let JavaScript find this element later.
-    -->
-    <div id="summary">
-
-      <!-- Each total is wrapped in its own div for styling later -->
-      <div class="summary-card">
-        <span class="summary-label">Total Balance</span>
-        <!-- id="balance" — JavaScript will update this text -->
-        <span class="summary-amount" id="balance">$0.00</span>
+    <!-- =====================================================
+      SIDEBAR (visible on desktop)
+    ===================================================== -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">$</div>
+        <span class="sidebar-brand-name">Expense Tracker</span>
       </div>
 
-      <div class="summary-card">
-        <span class="summary-label">Income</span>
-        <span class="summary-amount income" id="total-income">$0.00</span>
+      <nav class="sidebar-nav">
+        <button class="sidebar-nav-item active" data-section="form">
+          <span class="sidebar-nav-icon">➕</span> Add Expense
+        </button>
+        <button class="sidebar-nav-item" data-section="list">
+          <span class="sidebar-nav-icon">📋</span> Transactions
+        </button>
+        <button class="sidebar-nav-item" data-section="chart">
+          <span class="sidebar-nav-icon">📊</span> Chart
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <!-- Dark mode toggle -->
+        <button class="dark-toggle" id="dark-toggle-sidebar">
+          <span id="dark-icon-sidebar">🌙</span>
+          <span id="dark-label-sidebar">Dark Mode</span>
+        </button>
+        <!-- Online / Offline status -->
+        <div class="offline-badge">
+          <span class="status-dot online" id="status-dot"></span>
+          <span id="status-text">Online</span>
+        </div>
       </div>
+    </aside>
 
-      <div class="summary-card">
-        <span class="summary-label">Expenses</span>
-        <span class="summary-amount expense" id="total-expenses">$0.00</span>
-      </div>
+    <!-- =====================================================
+      MAIN WRAPPER
+    ===================================================== -->
+    <div class="main-wrapper">
 
-    </div><!-- end #summary -->
-  </header>
-
-
-  <!-- ============================================================
-    MAIN CONTENT
-    <main> wraps the primary content of the page.
-    A page should only have ONE <main> element.
-  ============================================================ -->
-  <main>
-
-    <!-- ============================================================
-      LEFT COLUMN — ADD EXPENSE FORM
-      <section> is a thematic grouping of content.
-      aria-label helps screen readers understand what this section is.
-    ============================================================ -->
-    <section aria-label="Add expense">
-
-      <h2>Add Expense</h2>
-
-      <!--
-        <form> wraps all inputs that belong together.
-        id="expense-form" — JavaScript will listen for this form's submit event.
-        novalidate — we will write our own validation in JavaScript (Stage 3).
-      -->
-      <form id="expense-form" novalidate>
-
-        <!--
-          BEST PRACTICE: always wrap an input with a <label>.
-          for="description" connects the label to the input with id="description".
-          This means clicking the label text focuses the input — better UX.
-        -->
-        <div class="form-group">
-          <label for="description">Description</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            placeholder="e.g. Grocery shopping"
-          >
-          <!-- This span will show a validation error message in Stage 3 -->
-          <span class="error-msg" id="description-error"></span>
+      <!-- HEADER -->
+      <header>
+        <div class="header-top">
+          <h1>Expense Tracker</h1>
+          <!-- Dark mode toggle (mobile only) -->
+          <button class="header-dark-toggle" id="dark-toggle-mobile">
+            <span id="dark-icon-mobile">🌙</span>
+            <span id="dark-label-mobile">Dark</span>
+          </button>
         </div>
 
-        <div class="form-group">
-          <label for="amount">Amount</label>
-          <!--
-            type="number" — only allows numbers.
-            min="0.01" — blocks zero or negative values at browser level.
-            step="0.01" — allows decimals like 9.99.
-          -->
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            placeholder="0.00"
-            min="0.01"
-            step="0.01"
-          >
-          <span class="error-msg" id="amount-error"></span>
-        </div>
-
-        <div class="form-group">
-          <label for="type">Type</label>
-          <!--
-            <select> creates a dropdown menu.
-            Each <option> is one choice.
-            value="" is what JavaScript reads — not the text shown to the user.
-          -->
-          <select id="type" name="type">
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="category">Category</label>
-          <select id="category" name="category">
-            <option value="food">Food & Dining</option>
-            <option value="transport">Transport</option>
-            <option value="housing">Housing</option>
-            <option value="entertainment">Entertainment</option>
-            <option value="health">Health</option>
-            <option value="shopping">Shopping</option>
-            <option value="salary">Salary</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="date">Date</label>
-          <!--
-            type="date" renders a date picker in the browser.
-            JavaScript will set a default value (today) in Stage 3.
-          -->
-          <input
-            type="date"
-            id="date"
-            name="date"
-          >
-          <span class="error-msg" id="date-error"></span>
-        </div>
-
-        <!--
-          type="submit" — clicking this triggers the form's submit event.
-          id="submit-btn" — JavaScript will change its text during edit mode.
-        -->
-        <button type="submit" id="submit-btn">Add Expense</button>
-
-        <!--
-          Cancel button — only visible when editing an expense (Stage 4).
-          hidden attribute makes it invisible by default.
-        -->
-        <button type="button" id="cancel-btn" hidden>Cancel</button>
-
-      </form><!-- end #expense-form -->
-
-    </section><!-- end add-expense section -->
-
-
-    <!-- ============================================================
-      RIGHT COLUMN — EXPENSE LIST
-    ============================================================ -->
-    <section aria-label="Expense list">
-
-      <h2>Transactions</h2>
-
-      <!-- FILTERS BAR -->
-      <div id="filters">
-
-        <!--
-          type="search" is like type="text" but shows a clear (×) button.
-          oninput fires as the user types — used for live search in Stage 4.
-        -->
-        <input
-          type="search"
-          id="search-input"
-          placeholder="Search expenses..."
-        >
-
-        <select id="filter-category">
-          <option value="all">All categories</option>
-          <option value="food">Food & Dining</option>
-          <option value="transport">Transport</option>
-          <option value="housing">Housing</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="health">Health</option>
-          <option value="shopping">Shopping</option>
-          <option value="salary">Salary</option>
-          <option value="other">Other</option>
-        </select>
-
-        <select id="filter-type">
-          <option value="all">All types</option>
-          <option value="expense">Expenses only</option>
-          <option value="income">Income only</option>
-        </select>
-
-      </div><!-- end #filters -->
-
-      <!--
-        <ul> = unordered list.
-        JavaScript will inject <li> elements here in Stage 3.
-        id="expense-list" is how JavaScript finds this element.
-      -->
-      <ul id="expense-list">
-        <!--
-          MINI EXAMPLE — what one expense card will look like as HTML.
-          JavaScript will generate these automatically in Stage 3.
-          This is just here so you can see the structure before JS is added.
-          DELETE THIS <li> when you start Stage 3.
-        -->
-        <li class="expense-card" data-id="example">
-          <div class="card-left">
-            <span class="card-category-badge food">Food</span>
-            <div class="card-info">
-              <span class="card-description">Grocery shopping</span>
-              <span class="card-date">2024-01-15</span>
-            </div>
+        <!-- Summary bar -->
+        <div id="summary">
+          <div class="summary-card">
+            <span class="summary-label">Total Balance</span>
+            <span class="summary-amount" id="balance">$0.00</span>
           </div>
-          <div class="card-right">
-            <span class="card-amount expense">-$45.00</span>
-            <div class="card-actions">
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete">Delete</button>
-            </div>
+          <div class="summary-card">
+            <span class="summary-label">Income</span>
+            <span class="summary-amount income" id="total-income">$0.00</span>
           </div>
-        </li>
+          <div class="summary-card">
+            <span class="summary-label">Expenses</span>
+            <span class="summary-amount expense" id="total-expenses">$0.00</span>
+          </div>
+        </div>
+      </header>
 
-      </ul><!-- end #expense-list -->
+      <!-- MAIN CONTENT -->
+      <main>
 
-      <!--
-        Empty state — shown when there are no expenses.
-        JavaScript will toggle its visibility.
-      -->
-      <div id="empty-state" hidden>
-        <p>No expenses yet. Add your first one!</p>
-      </div>
+        <!-- FORM SECTION -->
+        <section aria-label="Add expense">
+          <h2>Add Expense</h2>
+          <form id="expense-form" novalidate>
 
-    </section><!-- end expense-list section -->
+            <div class="form-group">
+              <label for="description">Description</label>
+              <input type="text" id="description" name="description" placeholder="e.g. Grocery shopping">
+              <span class="error-msg" id="description-error"></span>
+            </div>
 
+            <div class="form-group">
+              <label for="amount">Amount</label>
+              <input type="number" id="amount" name="amount" placeholder="0.00" min="0.01" step="0.01">
+              <span class="error-msg" id="amount-error"></span>
+            </div>
 
-    <!-- ============================================================
-      CHART SECTION
-      The <canvas> element is where Chart.js will draw the graph (Stage 6).
-      width and height are just the starting size — CSS can override them.
-    ============================================================ -->
-    <section aria-label="Spending chart">
-      <h2>Spending by Category</h2>
-      <canvas id="expense-chart" width="400" height="300"></canvas>
-    </section>
+            <div class="form-group">
+              <label for="type">Type</label>
+              <select id="type" name="type">
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </div>
 
-  </main><!-- end <main> -->
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" name="category">
+                <option value="food">Food & Dining</option>
+                <option value="transport">Transport</option>
+                <option value="housing">Housing</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="health">Health</option>
+                <option value="shopping">Shopping</option>
+                <option value="salary">Salary</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
 
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date">
+              <span class="error-msg" id="date-error"></span>
+            </div>
 
-  <!--
-    LINKING YOUR JAVASCRIPT FILE
-    This goes at the BOTTOM of <body>, just before </body>.
-    Why? The browser reads HTML top to bottom. If we put this in <head>,
-    JavaScript would run before the HTML elements exist — and fail.
-    Putting it here guarantees all elements are loaded first.
-  -->
+            <button type="submit" id="submit-btn">Add Expense</button>
+            <button type="button" id="cancel-btn" hidden>Cancel</button>
+
+          </form>
+        </section>
+
+        <!-- LIST SECTION -->
+        <section aria-label="Expense list">
+          <h2>Transactions</h2>
+
+          <div id="filters">
+            <input type="search" id="search-input" placeholder="Search expenses...">
+            <select id="filter-category">
+              <option value="all">All categories</option>
+              <option value="food">Food & Dining</option>
+              <option value="transport">Transport</option>
+              <option value="housing">Housing</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="health">Health</option>
+              <option value="shopping">Shopping</option>
+              <option value="salary">Salary</option>
+              <option value="other">Other</option>
+            </select>
+            <select id="filter-type">
+              <option value="all">All types</option>
+              <option value="expense">Expenses only</option>
+              <option value="income">Income only</option>
+            </select>
+          </div>
+
+          <ul id="expense-list"></ul>
+          <div id="empty-state" hidden>
+            <p>No expenses yet. Add your first one!</p>
+          </div>
+        </section>
+
+        <!-- CHART SECTION -->
+        <section aria-label="Spending chart">
+          <h2>Spending by Category</h2>
+          <canvas id="expense-chart" width="400" height="300"></canvas>
+        </section>
+
+      </main>
+
+    </div><!-- end .main-wrapper -->
+
+  </div><!-- end .app-shell -->
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mobile-bottom-nav">
+    <button class="nav-btn active" data-section="form">
+      <span class="nav-icon">➕</span>
+      Add
+    </button>
+    <button class="nav-btn" data-section="list">
+      <span class="nav-icon">📋</span>
+      Transactions
+    </button>
+    <button class="nav-btn" data-section="chart">
+      <span class="nav-icon">📊</span>
+      Chart
+    </button>
+    <button class="nav-btn" id="dark-toggle-bottom">
+      <span class="nav-icon" id="dark-icon-bottom">🌙</span>
+      Theme
+    </button>
+  </nav>
+
   <script src="app.js"></script>
 
-  <!-- PWA — Service Worker Registration -->
+  <!-- PWA Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -325,25 +222,3 @@
 
 </body>
 </html>
-
-<!--
-  ============================================================
-  WHAT TO DO NEXT
-
-  1. Open this file in your browser (drag it in, or use VS Code Live Server).
-  2. Read every comment carefully — do not skip them.
-  3. Try these exercises BEFORE moving to Stage 2:
-
-     EXERCISE A: Add a new category option to both <select id="category">
-     and <select id="filter-category">. Example: "Education".
-
-     EXERCISE B: Add a new input for "Notes" (a <textarea>) below the Date field.
-     Give it a label, id, and name. Does it appear in the browser?
-
-     EXERCISE C: Open DevTools (F12) → Elements tab. Click on different
-     HTML elements and watch them highlight on the page.
-     This is how you inspect real websites too.
-
-  4. When you are comfortable, create style.css and move to Stage 2.
-  ============================================================
--->
