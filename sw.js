@@ -6,8 +6,8 @@ const ASSETS = [
   '/index.html',
   '/style.css',
   '/app.js',
-  '/icons/MobileIcon.png',
-  '/icons/desktopIcon.png',
+  '/MobileIcon.png',
+  '/desktopIcon.png',
 ];
 
 // Install — cache all files
