@@ -399,7 +399,6 @@ document.addEventListener('DOMContentLoaded', function () {
     deferredInstallPrompt = null;
   });
 
-
   /* ============================================================
      14 — INITIAL RENDER
      ============================================================ */

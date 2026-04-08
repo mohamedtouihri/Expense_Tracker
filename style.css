@@ -137,7 +137,6 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: var(-
   color: var(--text-muted);
   padding: 2px 12px;
 }
-
 .status-dot {
   width: 7px; height: 7px;
   border-radius: 50%;
