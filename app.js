@@ -158,9 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const type = typeSelect.value;
     if (currentEditId !== null) {
       submitBtn.textContent =
-        type === "income" ? "Update Income" : "Update Expense";
+        type === "Income" ? "Update Income" : "Update Expense";
     } else {
-      submitBtn.textContent = type === "income" ? "Add Income" : "Add Expense";
+      submitBtn.textContent = type === "Income" ? "Add Income" : "Add Expense";
     }
   }
 
