@@ -7,7 +7,7 @@
 // [2] Added offline fallback page properly
 // ================================
 
-const CACHE_NAME = 'expense-tracker-v3';
+const CACHE_NAME = 'expense-tracker-v4';
 
 // FIX [1]: Use relative paths — works on localhost AND GitHub Pages
 const ASSETS = [
