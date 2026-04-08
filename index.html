@@ -1,110 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="style.css" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expense Tracker</title>
-  <link rel="stylesheet" href="style.css">
+    <!-- PWA -->
+    <meta name="theme-color" content="#6366f1" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Expenses" />
+    <link rel="apple-touch-icon" href="MobileIcon.png" />
+  </head>
 
-  <!-- PWA -->
-  <meta name="theme-color" content="#6366f1" />
-  <link rel="manifest" href="manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Expenses" />
-  <link rel="apple-touch-icon" href="MobileIcon.png" />
-</head>
-
-<body>
-
-  <!-- =====================================================
+  <body>
+    <!-- =====================================================
     APP SHELL — wraps sidebar + main content
   ===================================================== -->
-  <div class="app-shell">
-
-    <!-- =====================================================
+    <div class="app-shell">
+      <!-- =====================================================
       SIDEBAR (visible on desktop)
     ===================================================== -->
-    <aside class="sidebar">
-      <div class="sidebar-footer">
-        <!-- Dark mode toggle -->
-        <button class="dark-toggle" id="dark-toggle-sidebar">
-          <span id="dark-icon-sidebar">🌙</span>
-          <span id="dark-label-sidebar">Dark Mode</span>
-        </button>
-        <!-- Online / Offline status -->
-        <div class="offline-badge">
-          <span class="status-dot online" id="status-dot"></span>
-          <span id="status-text">Online</span>
+      <aside class="sidebar">
+        <div class="sidebar-footer">
+          <!-- Dark mode toggle -->
+          <button class="dark-toggle" id="dark-toggle-sidebar">
+            <span id="dark-icon-sidebar">🌙</span>
+            <span id="dark-label-sidebar">Dark Mode</span>
+          </button>
+          <!-- Online / Offline status -->
+          <div class="offline-badge">
+            <span class="status-dot online" id="status-dot"></span>
+            <span id="status-text">Online</span>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
 
-    <!-- =====================================================
+      <!-- =====================================================
       MAIN WRAPPER
     ===================================================== -->
-    <div class="main-wrapper">
-
-      <!-- HEADER -->
-      <header>
-        <div class="header-top">
-          <h1>Expense Tracker</h1>
-          <!-- Dark mode toggle (mobile only) -->
-          <button class="header-dark-toggle" id="dark-toggle-mobile">
-            <span id="dark-icon-mobile">🌙</span>
-            <span id="dark-label-mobile">Dark</span>
-          </button>
-        </div>
-
-        <!-- Summary bar -->
-        <div id="summary">
-          <div class="summary-card">
-            <span class="summary-label">Total Balance</span>
-            <span class="summary-amount" id="balance">TND 0.00</span>
+      <div class="main-wrapper">
+        <!-- HEADER -->
+        <header>
+          <div class="header-top">
+            <h1>Expense Tracker</h1>
+            <!-- Dark mode toggle (mobile only) -->
+            <button class="header-dark-toggle" id="dark-toggle-mobile">
+              <span id="dark-icon-mobile">🌙</span>
+              <span id="dark-label-mobile">Dark</span>
+            </button>
           </div>
-          <div class="summary-card">
-            <span class="summary-label">Income</span>
-            <span class="summary-amount income" id="total-income">TND 0.00</span>
+
+          <!-- Summary bar -->
+          <div id="summary">
+            <div class="summary-card">
+              <span class="summary-label">Total Balance</span>
+              <span class="summary-amount" id="balance">TND 0.00</span>
+            </div>
+            <div class="summary-card">
+              <span class="summary-label">Income</span>
+              <span class="summary-amount income" id="total-income"
+                >TND 0.00</span
+              >
+            </div>
+            <div class="summary-card">
+              <span class="summary-label">Expenses</span>
+              <span class="summary-amount expense" id="total-expenses"
+                >TND 0.00</span
+              >
+            </div>
           </div>
-          <div class="summary-card">
-            <span class="summary-label">Expenses</span>
-            <span class="summary-amount expense" id="total-expenses">TND 0.00</span>
-          </div>
-        </div>
-      </header>
+        </header>
 
-      <!-- MAIN CONTENT -->
-      <main>
+        <!-- MAIN CONTENT -->
+        <main>
+          <!-- FORM SECTION -->
+          <section aria-label="Add expense">
+            <h2>Add Expense</h2>
+            <form id="expense-form" novalidate>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  placeholder="e.g. Grocery shopping"
+                />
+                <span class="error-msg" id="description-error"></span>
+              </div>
 
-        <!-- FORM SECTION -->
-        <section aria-label="Add expense">
-          <h2>Add Expense</h2>
-          <form id="expense-form" novalidate>
+              <div class="form-group">
+                <label for="amount">Amount</label>
+                <input
+                  type="number"
+                  id="amount"
+                  name="amount"
+                  placeholder="0.00"
+                  min="0.01"
+                  step="0.01"
+                />
+                <span class="error-msg" id="amount-error"></span>
+              </div>
 
-            <div class="form-group">
-              <label for="description">Description</label>
-              <input type="text" id="description" name="description" placeholder="e.g. Grocery shopping">
-              <span class="error-msg" id="description-error"></span>
-            </div>
+              <div class="form-group">
+                <label for="type">Type</label>
+                <select id="type" name="type">
+                  <option value="expense">Expense</option>
+                  <option value="income">Income</option>
+                </select>
+              </div>
 
-            <div class="form-group">
-              <label for="amount">Amount</label>
-              <input type="number" id="amount" name="amount" placeholder="0.00" min="0.01" step="0.01">
-              <span class="error-msg" id="amount-error"></span>
-            </div>
+              <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                  <option value="food">Food & Dining</option>
+                  <option value="transport">Transport</option>
+                  <option value="housing">Housing</option>
+                  <option value="entertainment">Entertainment</option>
+                  <option value="health">Health</option>
+                  <option value="shopping">Shopping</option>
+                  <option value="salary">Salary</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
 
-            <div class="form-group">
-              <label for="type">Type</label>
-              <select id="type" name="type">
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
-              </select>
-            </div>
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" />
+                <span class="error-msg" id="date-error"></span>
+              </div>
 
-            <div class="form-group">
-              <label for="category">Category</label>
-              <select id="category" name="category">
+              <button type="submit" id="submit-btn">Add Expense</button>
+              <button type="button" id="cancel-btn" hidden>Cancel</button>
+            </form>
+          </section>
+
+          <!-- LIST SECTION -->
+          <section aria-label="Expense list">
+            <h2>Transactions</h2>
+
+            <div id="filters">
+              <input
+                type="search"
+                id="search-input"
+                placeholder="Search expenses..."
+              />
+              <select id="filter-category">
+                <option value="all">All categories</option>
                 <option value="food">Food & Dining</option>
                 <option value="transport">Transport</option>
                 <option value="housing">Housing</option>
@@ -114,88 +161,48 @@
                 <option value="salary">Salary</option>
                 <option value="other">Other</option>
               </select>
+              <select id="filter-type">
+                <option value="all">All types</option>
+                <option value="expense">Expenses only</option>
+                <option value="income">Income only</option>
+              </select>
             </div>
 
-            <div class="form-group">
-              <label for="date">Date</label>
-              <input type="date" id="date" name="date">
-              <span class="error-msg" id="date-error"></span>
+            <ul id="expense-list"></ul>
+            <div id="empty-state" hidden>
+              <p>No expenses yet. Add your first one!</p>
             </div>
+          </section>
+        </main>
+      </div>
+      <!-- end .main-wrapper -->
+    </div>
+    <!-- end .app-shell -->
 
-            <button type="submit" id="submit-btn">Add Expense</button>
-            <button type="button" id="cancel-btn" hidden>Cancel</button>
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="mobile-bottom-nav">
+      <button class="nav-btn active" data-section="form">
+        <span class="nav-icon">➕</span>
+        Add
+      </button>
+      <button class="nav-btn" data-section="list">
+        <span class="nav-icon">📋</span>
+        Transactions
+      </button>
+    </nav>
 
-          </form>
-        </section>
+    <script src="app.js"></script>
 
-        <!-- LIST SECTION -->
-        <section aria-label="Expense list">
-          <h2>Transactions</h2>
-
-          <div id="filters">
-            <input type="search" id="search-input" placeholder="Search expenses...">
-            <select id="filter-category">
-              <option value="all">All categories</option>
-              <option value="food">Food & Dining</option>
-              <option value="transport">Transport</option>
-              <option value="housing">Housing</option>
-              <option value="entertainment">Entertainment</option>
-              <option value="health">Health</option>
-              <option value="shopping">Shopping</option>
-              <option value="salary">Salary</option>
-              <option value="other">Other</option>
-            </select>
-            <select id="filter-type">
-              <option value="all">All types</option>
-              <option value="expense">Expenses only</option>
-              <option value="income">Income only</option>
-            </select>
-          </div>
-
-          <ul id="expense-list"></ul>
-          <div id="empty-state" hidden>
-            <p>No expenses yet. Add your first one!</p>
-          </div>
-        </section>
-
-      </main>
-
-    </div><!-- end .main-wrapper -->
-
-  </div><!-- end .app-shell -->
-
-  <!-- MOBILE BOTTOM NAV -->
-  <nav class="mobile-bottom-nav">
-    <button class="nav-btn active" data-section="form">
-      <span class="nav-icon">➕</span>
-      Add
-    </button>
-    <button class="nav-btn" data-section="list">
-      <span class="nav-icon">📋</span>
-      Transactions
-    </button>
-    <button class="nav-btn" data-section="chart">
-      <span class="nav-icon">📊</span>
-      Chart
-    </button>
-    <button class="nav-btn" id="dark-toggle-bottom">
-      <span class="nav-icon" id="dark-icon-bottom">🌙</span>
-      Theme
-    </button>
-  </nav>
-
-  <script src="app.js"></script>
-
-  <!-- PWA Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('✅ SW registered:', reg.scope))
-          .catch(err => console.error('❌ SW error:', err));
-      });
-    }
-  </script>
-
-</body>
+    <!-- PWA Service Worker -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("sw.js")
+            .then((reg) => console.log("✅ SW registered:", reg.scope))
+            .catch((err) => console.error("❌ SW error:", err));
+        });
+      }
+    </script>
+  </body>
 </html>
