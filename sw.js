@@ -1,16 +1,23 @@
 // ================================
 // Expense Tracker — Service Worker
+// FIXES:
+// [1] Relative paths './file' instead of '/file'
+//     → '/file' = root of domain (breaks on GitHub Pages subfolders & locally)
+//     → './file' = relative to sw.js location (works everywhere)
+// [2] Added offline fallback page properly
 // ================================
 
-const CACHE_NAME = 'expense-tracker-v1';
+const CACHE_NAME = 'expense-tracker-v2';
 
+// FIX [1]: Use relative paths — works on localhost AND GitHub Pages
 const ASSETS = [
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json',
-  '/MobileIcon.png',  
-  '/desktopIcon.png',
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './MobileIcon.png',
+  './desktopIcon.png',
 ];
 
 // Install — cache all assets

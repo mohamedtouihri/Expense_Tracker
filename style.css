@@ -101,60 +101,6 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: var(-
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.sidebar-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: var(--space-xl);
-  padding: 0 4px;
-}
-
-.sidebar-brand-icon {
-  width: 34px; height: 34px;
-  background: var(--primary);
-  color: white;
-  border-radius: var(--radius-md);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.sidebar-brand-name {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text);
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-}
-
-.sidebar-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  transition: all 0.15s ease;
-}
-
-.sidebar-nav-item:hover  { background: var(--surface-2); color: var(--text); }
-.sidebar-nav-item.active { background: var(--primary-light); color: var(--primary); }
-.sidebar-nav-icon        { font-size: 1rem; }
-
 .sidebar-footer {
   border-top: 1px solid var(--border);
   padding-top: var(--space-md);
@@ -565,15 +511,6 @@ body.dark .badge-other         { background: rgba(255,255,255,0.06); color: #94a
 }
 
 /* ============================================================
-   CHART
-   ============================================================ */
-#expense-chart {
-  max-width: 400px;
-  margin: 0 auto;
-  display: block;
-}
-
-/* ============================================================
    SCROLLBAR
    ============================================================ */
 ::-webkit-scrollbar { width: 5px; }
@@ -599,7 +536,7 @@ body.dark .badge-other         { background: rgba(255,255,255,0.06); color: #94a
 /* ============================================================
    RESPONSIVE — Mobile
    ============================================================ */
-@media (max-width: 640px) {
+@media (max-width: 485px) and (max-width: 690px)  {
   .sidebar              { display: none; }
   .main-wrapper         { margin-left: 0; }
   .header-dark-toggle   { display: flex; }
@@ -626,6 +563,8 @@ body.dark .badge-other         { background: rgba(255,255,255,0.06); color: #94a
     z-index: 50;
     transition: background 0.3s ease;
   }
+  .card-date { display: none; }
+  .card-right { flex-direction: column; align-items: flex-end; }
 
   .mobile-bottom-nav .nav-btn {
     flex: 1;
@@ -653,7 +592,3 @@ body.dark .badge-other         { background: rgba(255,255,255,0.06); color: #94a
   .mobile-bottom-nav .nav-btn .nav-icon { font-size: 1.1rem; }
 }
 
-@media (max-width: 480px) {
-  .card-date { display: none; }
-  .card-right { flex-direction: column; align-items: flex-end; }
-}

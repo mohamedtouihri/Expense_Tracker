@@ -27,23 +27,6 @@
       SIDEBAR (visible on desktop)
     ===================================================== -->
     <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="sidebar-brand-icon">$</div>
-        <span class="sidebar-brand-name">Expense Tracker</span>
-      </div>
-
-      <nav class="sidebar-nav">
-        <button class="sidebar-nav-item active" data-section="form">
-          <span class="sidebar-nav-icon">➕</span> Add Expense
-        </button>
-        <button class="sidebar-nav-item" data-section="list">
-          <span class="sidebar-nav-icon">📋</span> Transactions
-        </button>
-        <button class="sidebar-nav-item" data-section="chart">
-          <span class="sidebar-nav-icon">📊</span> Chart
-        </button>
-      </nav>
-
       <div class="sidebar-footer">
         <!-- Dark mode toggle -->
         <button class="dark-toggle" id="dark-toggle-sidebar">
@@ -78,15 +61,15 @@
         <div id="summary">
           <div class="summary-card">
             <span class="summary-label">Total Balance</span>
-            <span class="summary-amount" id="balance">$0.00</span>
+            <span class="summary-amount" id="balance">TND 0.00</span>
           </div>
           <div class="summary-card">
             <span class="summary-label">Income</span>
-            <span class="summary-amount income" id="total-income">$0.00</span>
+            <span class="summary-amount income" id="total-income">TND 0.00</span>
           </div>
           <div class="summary-card">
             <span class="summary-label">Expenses</span>
-            <span class="summary-amount expense" id="total-expenses">$0.00</span>
+            <span class="summary-amount expense" id="total-expenses">TND 0.00</span>
           </div>
         </div>
       </header>
@@ -173,12 +156,6 @@
           <div id="empty-state" hidden>
             <p>No expenses yet. Add your first one!</p>
           </div>
-        </section>
-
-        <!-- CHART SECTION -->
-        <section aria-label="Spending chart">
-          <h2>Spending by Category</h2>
-          <canvas id="expense-chart" width="400" height="300"></canvas>
         </section>
 
       </main>
