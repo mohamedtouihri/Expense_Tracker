@@ -147,6 +147,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchInput = document.getElementById("search-input");
   const filterCategory = document.getElementById("filter-category");
   const filterType = document.getElementById("filter-type");
+  const formTitle = document.querySelector(
+    'section[aria-label="Add expense"] h2',
+  );
 
   if (dateInput) dateInput.value = new Date().toISOString().split("T")[0];
 
@@ -155,16 +158,17 @@ document.addEventListener("DOMContentLoaded", function () {
      ============================================================ */
 
   function updateSubmitButtonText() {
-    const type = typeSelect.value;
-    if (currentEditId !== null) {
-      submitBtn.textContent =
-        type === "Income" ? "Update Income" : "Update Expense";
-    } else {
-      submitBtn.textContent = type === "Income" ? "Add Income" : "Add Expense";
+    const typeLabel = typeSelect.value === "income" ? "Income" : "Expense";
+    const action = currentEditId !== null ? "Update" : "Add";
+    submitBtn.textContent = `${action} ${typeLabel}`;
+    if (formTitle) {
+      formTitle.textContent =
+        currentEditId !== null ? `Edit ${typeLabel}` : `Add ${typeLabel}`;
     }
   }
 
   typeSelect.addEventListener("change", updateSubmitButtonText);
+  updateSubmitButtonText();
 
   /* ============================================================
      5 — LOCALSTORAGE SAVE
